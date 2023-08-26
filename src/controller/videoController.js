@@ -1,5 +1,8 @@
 const trending = (req, res) => res.send("Home Page Videos");
-const watch = (req, res) => res.send("Watch");
+const see = (req, res) => res.send("Watch");
 const edit = (req, res) => res.send("Edit");
+const search = (req, res) => res.send("Search");
+const deleteVideo = (req, res) => res.send("Delete Video");
+const upload = (req, res) => res.send("Upload");
 
-export { trending, watch, edit };
+export { trending, see, edit, search, deleteVideo, upload };
