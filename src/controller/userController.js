@@ -5,4 +5,4 @@ const login = (req, res) => res.send("Login");
 const logout = (req, res) => res.send("Logout");
 const see = (req, res) => res.send("See User");
 
-export { join, edit, remove, login };
+export { join, edit, remove, login, logout, see };
