@@ -4,7 +4,6 @@ const fakeUser = {
 };
 let videos = [
   {
-    title: "Hello",
     title: "First Video",
     rating: 5,
     comments: 2,
@@ -13,7 +12,6 @@ let videos = [
     id: 0,
   },
   {
-    title: "Video #2",
     title: "Second Video",
     rating: 5,
     comments: 2,
@@ -22,7 +20,6 @@ let videos = [
     id: 1,
   },
   {
-    title: "Whatsup",
     title: "Third Video",
     rating: 5,
     comments: 2,
@@ -50,8 +47,31 @@ const postEdit = (req, res) => {
   videos[id].title = title;
   return res.redirect(`/videos/${id}`);
 };
+const getUpload = (req, res) =>
+  res.render("upload", { pageTitle: "Upload Video" });
+const postUpload = (req, res) => {
+  const { title } = req.body;
+  const newVideo = {
+    title,
+    rating: 0,
+    comments: 0,
+    createdAt: "just now",
+    views: 0,
+    id: videos.length + 1,
+  };
+  videos.push(newVideo);
+  return res.redirect("/");
+};
 const search = (req, res) => res.send("Search");
 const deleteVideo = (req, res) => res.send("Delete Video");
-const upload = (req, res) => res.send("Upload");
 
-export { trending, watch, getEdit, postEdit, search, deleteVideo, upload };
+export {
+  trending,
+  watch,
+  getEdit,
+  postEdit,
+  search,
+  deleteVideo,
+  getUpload,
+  postUpload,
+};
