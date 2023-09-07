@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "nodemon --exec babel-node src/index.js"
+    "dev": "nodemon --exec babel-node src/init.js"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
@@ -11,7 +11,7 @@
   "name": "wetube_test",
   "description": "wetube_test",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
     "abbrev": "^1.1.1",
     "anymatch": "^3.1.3",
