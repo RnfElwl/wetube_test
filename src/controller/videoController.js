@@ -26,8 +26,22 @@ const postEdit = (req, res) => {
 };
 const getUpload = (req, res) =>
   res.render("upload", { pageTitle: "Upload Video" });
-const postUpload = (req, res) => {
-  const { title } = req.body;
+
+const postUpload = async (req, res) => {
+  const { title, description, hashtags } = req.body;
+  console.log(title, description, hashtags);
+
+  const video = new Video({
+    title,
+    description,
+    hashtags: hashtags.split(",").map((word) => `#${word}`),
+    createdAt: Date.now(),
+    meta: {
+      views: 0,
+      rating: 0,
+    },
+  });
+  await video.save();
   return res.redirect("/");
 };
 const search = (req, res) => res.send("Search");
