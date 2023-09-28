@@ -1,10 +1,16 @@
 import express from "express";
-import { edit, remove, logout, see } from "../controller/userController";
+import { home, search } from "../controller/videoController";
+import {
+  getJoin,
+  postJoin,
+  getLogin,
+  postLogin,
+} from "../controller/userController";
 const rootRouter = express.Router();
 
-rootRouter.get("/edit", edit);
-rootRouter.get("/remove", remove);
-rootRouter.get("/logout", logout);
-rootRouter.get("/:id", see);
+rootRouter.get("/", home);
+rootRouter.route("/join").get(getJoin).post(postJoin);
+rootRouter.route("/login").get(getLogin).post(postLogin);
+rootRouter.get("/search", search);
 
 export default rootRouter;
