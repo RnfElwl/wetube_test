@@ -34,7 +34,7 @@ const getLogin = (req, res) => res.render("login", { pageTitle: "Login" });
 const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const pageTitle = "Login";
-  const exists = await User.exists({ username, socialOnly: flase });
+  const exists = await User.exists({ username, socialOnly: false });
   if (!exists) {
     return res.status(400).render("login", {
       pageTitle,
@@ -134,7 +134,11 @@ const finishGithubLogin = async (req, res) => {
 };
 const edit = (req, res) => res.send("Edit User");
 const remove = (req, res) => res.send("Remove User");
-const logout = (req, res) => res.send("Logout");
+const logout = (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
+};
+
 const see = (req, res) => res.send("See User");
 
 export {
