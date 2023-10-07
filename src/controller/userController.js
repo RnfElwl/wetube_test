@@ -34,7 +34,7 @@ const getLogin = (req, res) => res.render("login", { pageTitle: "Login" });
 const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const pageTitle = "Login";
-  const exists = await User.exists({ username });
+  const exists = await User.exists({ username, socialOnly: flase });
   if (!exists) {
     return res.status(400).render("login", {
       pageTitle,
@@ -113,13 +113,9 @@ const finishGithubLogin = async (req, res) => {
     if (!emailObj) {
       return res.redirect("/login");
     }
-    const existingUser = await User.findOne({ email: emailObj.email });
-    if (existingUser) {
-      req.session.loggedIn = true;
-      req.session.user = existingUser;
-      return res.redirect("/");
-    } else {
-      const user = await User.create({
+    let user = await User.findOne({ email: emailObj.email });
+    if (!user) {
+      user = await User.create({
         name: userData.name,
         username: userData.login,
         email: emailObj.email,
