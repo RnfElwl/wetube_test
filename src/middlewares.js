@@ -5,4 +5,19 @@ const localsMiddleware = (req, res, next) => {
   next();
 };
 
-export { localsMiddleware };
+const protectorMiddleware = (req, res, next) => {
+  if (req.session.loggendIn) {
+    return next();
+  } else {
+    return res.redirect("/login");
+  }
+};
+
+const publicOnlyMiddleware = (req, res, next) => {
+  if (!req.session.loggendIn) {
+    return next();
+  } else {
+    return res.redirect("/");
+  }
+};
+export { localsMiddleware, protectorMiddleware, publicOnlyMiddleware };

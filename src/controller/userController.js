@@ -132,7 +132,10 @@ const finishGithubLogin = async (req, res) => {
     return res.redirect("/login");
   }
 };
-const edit = (req, res) => res.send("Edit User");
+const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+const postEdit = (req, res) => res.render("edit-profile");
 const remove = (req, res) => res.send("Remove User");
 const logout = (req, res) => {
   req.session.destroy();
@@ -144,7 +147,8 @@ const see = (req, res) => res.send("See User");
 export {
   getJoin,
   postJoin,
-  edit,
+  getEdit,
+  postEdit,
   remove,
   getLogin,
   postLogin,
