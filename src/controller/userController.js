@@ -68,6 +68,7 @@ const startGithubLogin = (req, res) => {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
+  console.log("11111111");
   return res.redirect(finalUrl);
 };
 
@@ -80,7 +81,6 @@ const finishGithubLogin = async (req, res) => {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
-
   const tokenRequest = await (
     await fetch(finalUrl, {
       method: "POST",
@@ -99,7 +99,6 @@ const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {
@@ -111,6 +110,7 @@ const finishGithubLogin = async (req, res) => {
       (email) => email.primary === true && email.verified === true
     );
     if (!emailObj) {
+      // set notification
       return res.redirect("/login");
     }
     let user = await User.findOne({ email: emailObj.email });
@@ -124,10 +124,10 @@ const finishGithubLogin = async (req, res) => {
         socialOnly: true,
         location: userData.location,
       });
-      req.session.loggedIn = true;
-      req.session.user = user;
-      return res.redirect("/");
     }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
   } else {
     return res.redirect("/login");
   }
@@ -135,7 +135,28 @@ const finishGithubLogin = async (req, res) => {
 const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
-const postEdit = (req, res) => res.render("edit-profile");
+const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+
+  const updateUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updateUser;
+
+  return res.redirect("/users/edit");
+};
 const remove = (req, res) => res.send("Remove User");
 const logout = (req, res) => {
   req.session.destroy();
