@@ -6,7 +6,7 @@ const localsMiddleware = (req, res, next) => {
 };
 
 const protectorMiddleware = (req, res, next) => {
-  if (req.session.loggendIn) {
+  if (req.session.loggedIn) {
     return next();
   } else {
     return res.redirect("/login");
@@ -14,7 +14,7 @@ const protectorMiddleware = (req, res, next) => {
 };
 
 const publicOnlyMiddleware = (req, res, next) => {
-  if (!req.session.loggendIn) {
+  if (!req.session.loggedIn) {
     return next();
   } else {
     return res.redirect("/");

@@ -68,7 +68,7 @@ const startGithubLogin = (req, res) => {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
-  console.log("11111111");
+
   return res.redirect(finalUrl);
 };
 
@@ -132,6 +132,7 @@ const finishGithubLogin = async (req, res) => {
     return res.redirect("/login");
   }
 };
+
 const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
@@ -142,7 +143,15 @@ const postEdit = async (req, res) => {
     },
     body: { name, email, username, location },
   } = req;
-
+  const sessionData = req.session.user;
+  const existsUsername = await User.findOne({ username: sessionData.username });
+  const existsEmail = await User.findOne({ email: sessionData.email });
+  if (JSON.stringify(existsEmail._id) != JSON.stringify(existsUsername._id)) {
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "This username/email is already taken.",
+    });
+  }
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
