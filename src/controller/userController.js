@@ -173,7 +173,32 @@ const getChangePassword = (req, res) => {
   return res.render("user/change-password", { pageTitle: "Change Password" });
 };
 
-const postChangePassword = (req, res) => {
+const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id, password },
+    },
+    body: { oldPassword, newPassword, newPasswordConfirmaion },
+  } = req;
+  const ok = await bcrypt.compare(oldPassword, password);
+  if (!ok) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The current password is incorrect",
+    });
+  }
+  if (newPassword !== newPasswordConfirmaion) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The Password does not match the confirmation",
+    });
+  }
+  const user = await User.findById(_id);
+  console.log(user.password);
+  user.password = newPassword;
+  console.log(user.password);
+  await user.save();
+  req.session.user.password = user.password;
   return res.redirect("/");
 };
 const remove = (req, res) => res.send("Remove User");
