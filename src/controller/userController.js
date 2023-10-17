@@ -166,6 +166,16 @@ const postEdit = async (req, res) => {
 
   return res.redirect("/users/edit");
 };
+const getChangePassword = (req, res) => {
+  if (req.session.socialOnly) {
+    return res.redirect("/");
+  }
+  return res.render("user/change-password", { pageTitle: "Change Password" });
+};
+
+const postChangePassword = (req, res) => {
+  return res.redirect("/");
+};
 const remove = (req, res) => res.send("Remove User");
 const logout = (req, res) => {
   req.session.destroy();
@@ -186,4 +196,6 @@ export {
   see,
   startGithubLogin,
   finishGithubLogin,
+  getChangePassword,
+  postChangePassword,
 };
