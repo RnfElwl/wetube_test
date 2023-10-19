@@ -210,7 +210,17 @@ const logout = (req, res) => {
   return res.redirect("/");
 };
 
-const see = (req, res) => res.send("See User");
+const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not found." });
+  }
+  return res.render("user/profile", {
+    pageTitle: `${user.name} Profile`,
+    user,
+  });
+};
 
 export {
   getJoin,

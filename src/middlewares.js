@@ -22,10 +22,22 @@ const publicOnlyMiddleware = (req, res, next) => {
   }
 };
 
-const uploadFiles = multer({ dest: "uploads/" });
+const avatarUpload = multer({
+  dest: "uploads/avatars/",
+  limits: {
+    fileSize: 3000000,
+  },
+});
+const videoUpload = multer({
+  dest: "uploads/videos/",
+  limits: {
+    fileSize: 10000000,
+  },
+});
 export {
   localsMiddleware,
   protectorMiddleware,
   publicOnlyMiddleware,
-  uploadFiles,
+  avatarUpload,
+  videoUpload,
 };
