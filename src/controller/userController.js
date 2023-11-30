@@ -2,6 +2,7 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import { token } from "morgan";
 import fetch from "node-fetch";
+import Video from "../models/Video";
 
 const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 const postJoin = async (req, res) => {
@@ -216,9 +217,12 @@ const see = async (req, res) => {
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found." });
   }
+  const videos = await Video.find({ owner: user._id });
+  console.log(videos);
   return res.render("user/profile", {
     pageTitle: `${user.name} Profile`,
     user,
+    videos,
   });
 };
 
