@@ -115,7 +115,11 @@ const finishGithubLogin = async (req, res) => {
       return res.redirect("/login");
     }
     let user = await User.findOne({ email: emailObj.email });
+
     if (!user) {
+      if (!userData.name) {
+        userData.name = userData.login;
+      }
       user = await User.create({
         avatarUrl: userData.avatar_url,
         name: userData.name,
@@ -198,9 +202,9 @@ const postChangePassword = async (req, res) => {
     });
   }
   const user = await User.findById(_id);
-  console.log(user.password);
+
   user.password = newPassword;
-  console.log(user.password);
+
   await user.save();
   req.session.user.password = user.password;
   return res.redirect("/");
@@ -214,6 +218,8 @@ const logout = (req, res) => {
 const see = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).populate("videos");
+  const a = await User.find();
+
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found." });
   }
